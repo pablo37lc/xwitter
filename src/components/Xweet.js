@@ -14,7 +14,7 @@ const Xweet = ({ xweetObj, isOwner }) => {
         const ok = window.confirm("Are you sure you want to delete this xweet?");
         if(ok) {
             await deleteDoc(xweetDoc);
-            if(AttachmentRef !== "") {
+            if(xweetObj.attachmentUrl !== "") {
                 await deleteObject(AttachmentRef);
             }
         }
