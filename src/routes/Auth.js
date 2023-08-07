@@ -1,4 +1,4 @@
-import { auth } from "fbase";
+import { authService } from "fbase";
 import { GithubAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 
@@ -24,10 +24,10 @@ function Auth() {
         try {
             let data;
             if (newAccount) {
-                data = await createUserWithEmailAndPassword(auth, email, password)
+                data = await createUserWithEmailAndPassword(authService, email, password)
             }
             else {
-                data = await signInWithEmailAndPassword(auth, email, password)
+                data = await signInWithEmailAndPassword(authService, email, password)
             }
         } catch (error) {
             setError(error.message);
@@ -50,7 +50,7 @@ function Auth() {
             provider = new GithubAuthProvider();
         }
 
-        const data = await signInWithPopup(auth, provider);
+        const data = await signInWithPopup(authService, provider);
         console.log(data);
     };
 

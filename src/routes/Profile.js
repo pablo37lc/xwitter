@@ -1,4 +1,4 @@
-import { auth } from "fbase";
+import { authService } from "fbase";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,7 @@ function Profile() {
     const navigate = useNavigate();
 
     const onLogOutClick = () => {
-        signOut(auth);     
+        signOut(authService);     
         navigate("/");
     }
 
