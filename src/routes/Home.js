@@ -26,9 +26,9 @@ function Home({userObj}) {
     }, []);
 
     return (
-        <div>
-            <XweetFactory userObj={userObj} ></XweetFactory>
-            <div>
+        <div className="container">
+            <XweetFactory userObj={userObj} />
+            <div style={{ marginTop: 30 }}>
                 {xweets.map((xweet) => (
                     <>
                     <Xweet

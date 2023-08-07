@@ -3,6 +3,9 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import React, { useState } from "react";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+
 const Xweet = ({ xweetObj, isOwner }) => {
     const [editing, setEditing] = useState(false);
     const [newXweet, setNewXweet] = useState(xweetObj.text);
@@ -36,10 +39,10 @@ const Xweet = ({ xweetObj, isOwner }) => {
     };
 
     return (
-        <div>
+        <div className="xweet">
             {editing ? (
                 <>
-                    <form onSubmit={onSubmit}>
+                    <form onSubmit={onSubmit} className="container xweetEdit">
                         <input
                             onChange={onChange}
                             value={newXweet}
@@ -47,19 +50,25 @@ const Xweet = ({ xweetObj, isOwner }) => {
                             placeholder="Edit your Xweet"
                             required
                         ></input>
-                        <input type="submit" value="Update Xweet"></input>
+                        <input type="submit" value="Update Xweet" className="formBtn"></input>
                     </form>
-                    <button onClick={toggleEditing}>Cancel</button>
+                    <span onClick={toggleEditing} className="formBtn cancelBtn">
+                        Cancel
+                    </span>
                 </>
             ) : (
                 <>
                     <h4>{ xweetObj.text }</h4>
-                    {xweetObj.attachmentUrl && <img src={xweetObj.attachmentUrl} alt={xweetObj.text} width="50px" height="50px"></img>}
+                    {xweetObj.attachmentUrl && <img src={xweetObj.attachmentUrl} />}
                     {isOwner && (
-                        <>
-                            <button onClick={onDeleteClick}>Delete Xweet</button>
-                            <button onClick={toggleEditing}>Edit Xweet</button>
-                        </>
+                        <div className="xweet__actions">
+                            <span onClick={onDeleteClick}>
+                                <FontAwesomeIcon icon={faTrash} />
+                            </span>
+                            <span onClick={toggleEditing}>
+                                <FontAwesomeIcon icon={faPencilAlt} />
+                            </span>
+                        </div>
                     )}
                 </>
             )}

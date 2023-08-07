@@ -1,13 +1,10 @@
-import Xweet from "components/Xweet";
-import { authService, dbService } from "fbase";
+import { authService } from "fbase";
 import { signOut, updateProfile } from "firebase/auth";
-import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
 function Profile({ refreshUser, userObj }) {
-    const [myXweets, setMyXweets] = useState([]);
     const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
 
     const navigate = useNavigate();
@@ -16,25 +13,6 @@ function Profile({ refreshUser, userObj }) {
         signOut(authService);     
         navigate("/");
     };
-
-    const getMyXweets = () => {
-        const q = query(
-            collection(dbService, "xweets"),
-            where("creatorId", "==", userObj.uid),
-            orderBy("createdAt", "desc"),
-        )
-        onSnapshot(q, (snapshot) => {
-            const xweetArray = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setMyXweets(xweetArray);
-        });
-    };
-
-    useEffect(() =>{
-        getMyXweets();
-    }, []);
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -50,31 +28,29 @@ function Profile({ refreshUser, userObj }) {
     }
 
     return (
-        <>
-            <form onSubmit={onSubmit}>
+        <div className="container">
+            <form onSubmit={onSubmit} className="profileForm">
                 <input
                     value={newDisplayName}
                     onChange={onChange}
                     type="text"
+                    autoFocus
                     placeholder="Display name"
+                    className="formInput"
                 ></input>
-                <input type="submit" value="Update Profile"/>
+                <input
+                    type="submit"
+                    value="Update Profile"
+                    className="formBtn"
+                    style={{
+                        marginTop: 10,
+                    }}
+                />
             </form>
-            <button onClick={onLogOutClick}>Log Out</button>
-
-            <div>
-                {myXweets.map((xweet) => (
-                    <>
-                    <Xweet
-                        key={xweet.id}
-                        xweetObj={xweet}
-                        isOwner={xweet.creatorId === userObj.uid}
-                    ></Xweet>                        
-                    </>
-                ))}
-            </div>
-
-        </>
+            <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
+                Log Out
+            </span>
+        </div>
     );
 }
 
